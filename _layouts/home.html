@@ -1,0 +1,96 @@
+---
+layout: default
+---
+<style>
+  .hero {
+    text-align: center;
+    padding: 4rem 0 3rem;
+  }
+  .hero-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 2px solid rgba(124,111,247,0.5);
+    margin-bottom: 1.2rem;
+    box-shadow: 0 0 30px rgba(124,111,247,0.3);
+  }
+  .hero h1 {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #fff 30%, #7c6ff7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+  }
+  .hero p {
+    color: #64748b;
+    font-size: 1rem;
+  }
+
+  .posts-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #475569;
+    margin-bottom: 1rem;
+  }
+
+  .post-card {
+    display: block;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1rem;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  }
+  .post-card:hover {
+    background: rgba(124,111,247,0.08);
+    border-color: rgba(124,111,247,0.3);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+  .post-card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-bottom: 0.3rem;
+  }
+  .post-card-date {
+    font-size: 0.8rem;
+    color: #475569;
+  }
+  .post-card-excerpt {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-top: 0.5rem;
+  }
+
+  .empty {
+    text-align: center;
+    color: #475569;
+    padding: 3rem 0;
+  }
+</style>
+
+<div class="hero">
+  <img class="hero-avatar" src="https://github.com/yangxinxin-7.png" alt="avatar">
+  <h1>{{ site.title }}</h1>
+  <p>{{ site.description }}</p>
+</div>
+
+<p class="posts-title">文章</p>
+
+{% if site.posts.size > 0 %}
+  {% for post in site.posts %}
+  <a class="post-card" href="{{ post.url }}">
+    <div class="post-card-title">{{ post.title }}</div>
+    <div class="post-card-date">{{ post.date | date: "%Y年%m月%d日" }}</div>
+    {% if post.excerpt %}
+    <div class="post-card-excerpt">{{ post.excerpt | strip_html | truncate: 100 }}</div>
+    {% endif %}
+  </a>
+  {% endfor %}
+{% else %}
+  <div class="empty">还没有文章，去 _posts 目录下新建一篇吧。</div>
+{% endif %}
