@@ -2,6 +2,52 @@
 layout: default
 ---
 <style>
+  .post-container {
+    display: flex;
+    gap: 2.5rem;
+    align-items: flex-start;
+  }
+
+  /* 左侧目录 */
+  .toc {
+    position: sticky;
+    top: 76px;
+    width: 220px;
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 1.2rem;
+  }
+  .toc-title {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #475569;
+    margin-bottom: 0.8rem;
+  }
+  .toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .toc li { margin: 0; }
+  .toc a {
+    display: block;
+    padding: 0.28rem 0 0.28rem 0.75rem;
+    color: #64748b;
+    font-size: 0.82rem;
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    line-height: 1.4;
+  }
+  .toc a:hover { color: #e2e8f0; text-decoration: none; }
+  .toc a.active { color: #7c6ff7; border-left-color: #7c6ff7; }
+  .toc .toc-h3 { padding-left: 1.5rem; font-size: 0.78rem; }
+
+  /* 右侧内容 */
+  .post-content { flex: 1; min-width: 0; }
   .post-header { margin-bottom: 2.5rem; }
   .post-header h1 {
     font-size: 2rem;
@@ -21,62 +67,34 @@ layout: default
     text-decoration: none;
   }
   .back-link:hover { text-decoration: underline; }
-
-  .toc {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 10px;
-    padding: 1.2rem 1.5rem;
-    margin-bottom: 2rem;
-  }
-  .toc-title {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #475569;
-    margin-bottom: 0.8rem;
-  }
-  .toc ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .toc li { margin: 0; }
-  .toc a {
-    display: block;
-    padding: 0.25rem 0;
-    color: #64748b;
-    font-size: 0.875rem;
-    text-decoration: none;
-    transition: color 0.2s;
-    border-left: 2px solid transparent;
-    padding-left: 0.75rem;
-  }
-  .toc a:hover { color: #e2e8f0; text-decoration: none; }
-  .toc a.active { color: #7c6ff7; border-left-color: #7c6ff7; }
-  .toc .toc-h3 { padding-left: 1.75rem; font-size: 0.82rem; }
-
   .post-body { border-top: 1px solid rgba(255,255,255,0.06); padding-top: 2rem; }
+
+  /* 窄屏隐藏左侧目录 */
+  @media (max-width: 860px) {
+    .toc { display: none; }
+  }
 </style>
 
 <a class="back-link" href="/">← 返回</a>
 
-<div class="post-header">
-  <h1>{{ page.title }}</h1>
-  <div class="post-meta">{{ page.date | date: "%Y年%m月%d日" }}</div>
-</div>
+<div class="post-container">
+  <aside class="toc">
+    <div class="toc-title">目录</div>
+    <ul id="toc-list"></ul>
+  </aside>
 
-<div class="toc">
-  <div class="toc-title">目录</div>
-  <ul id="toc-list"></ul>
-</div>
-
-<div class="post-body">
-  {{ content }}
+  <div class="post-content">
+    <div class="post-header">
+      <h1>{{ page.title }}</h1>
+      <div class="post-meta">{{ page.date | date: "%Y年%m月%d日" }}</div>
+    </div>
+    <div class="post-body">
+      {{ content }}
+    </div>
+  </div>
 </div>
 
 <script>
-  // 给所有标题加 id，生成目录
   const body = document.querySelector('.post-body');
   const headings = body.querySelectorAll('h2, h3');
   const tocList = document.getElementById('toc-list');
@@ -86,9 +104,7 @@ layout: default
   }
 
   headings.forEach((h, i) => {
-    if (!h.id) {
-      h.id = 'heading-' + i;
-    }
+    if (!h.id) h.id = 'heading-' + i;
     const li = document.createElement('li');
     const a = document.createElement('a');
     a.href = '#' + h.id;
@@ -103,7 +119,6 @@ layout: default
     tocList.appendChild(li);
   });
 
-  // 滚动高亮当前章节
   const links = tocList.querySelectorAll('a');
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
