@@ -3,9 +3,7 @@ layout: default
 ---
 <style>
   .post-container {
-    display: flex;
-    gap: 2.5rem;
-    align-items: flex-start;
+    display: block;
   }
 
   /* 左侧目录 */
@@ -46,8 +44,7 @@ layout: default
   .toc a.active { color: #7c6ff7; border-left-color: #7c6ff7; }
   .toc .toc-h3 { padding-left: 1.5rem; font-size: 0.78rem; }
 
-  /* 右侧内容 */
-  .post-content { flex: 1; min-width: 0; }
+  .post-content {}
   .post-header { margin-bottom: 2.5rem; }
   .post-header h1 {
     font-size: 2rem;
@@ -69,8 +66,18 @@ layout: default
   .back-link:hover { text-decoration: underline; }
   .post-body { border-top: 1px solid rgba(255,255,255,0.06); padding-top: 2rem; }
 
-  /* 窄屏隐藏左侧目录 */
-  @media (max-width: 860px) {
+  /* 宽屏：目录悬浮在内容左侧之外 */
+  @media (min-width: 1200px) {
+    .toc {
+      position: fixed;
+      top: 76px;
+      left: calc(50% - 390px - 260px);
+      width: 220px;
+    }
+  }
+
+  /* 中等屏幕隐藏目录 */
+  @media (max-width: 1199px) {
     .toc { display: none; }
   }
 </style>
